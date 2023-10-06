@@ -1,0 +1,36 @@
+---
+import { storyblokEditable, renderRichText } from "@storyblok/astro";
+
+const { blok } = Astro.props;
+const content = renderRichText(blok.content);
+
+const date = new Date(blok.published_date).toLocaleDateString("en-US", {
+  dateStyle: "long",
+});
+---
+
+<style>
+  .main-title {
+    text-wrap: balance;
+  }
+</style>
+<article
+  class="prose prose-zinc prose-img:rounded-xl md:prose-lg lg:prose-xl m-auto pl-4 pr-4 pt-40"
+  {...storyblokEditable(blok)}
+>
+  <h1 class="main-title not-prose text-center text-4xl font-bold mb-4">
+    {blok.title}
+  </h1>
+  <hr class="max-w-[20px] not-prose mx-auto my-2 border-gray" />
+  <time
+    class="text-center block text-gray-500 font-light text-lg"
+    datetime={blok.published_date}>{date}</time
+  >
+  <img
+    class="w-full h-[360px] lg:h-[450px] object-cover"
+    alt={blok.preview_image.alt}
+    src={`${blok.preview_image.filename}/m/1400x0`}
+  />
+  <p class="">{blok.description}</p>
+  <Fragment set:html={content} />
+</article>
